@@ -10,10 +10,12 @@ public class PlayerController : MonoBehaviour {
     public float gravity;
     private Vector3 moveDirection = Vector3.zero;
     AudioCalculator audioCalculator;
+    public bool isGrounded;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        isGrounded = true;
     }
 
     void Update()
@@ -23,7 +25,7 @@ public class PlayerController : MonoBehaviour {
         //rb.velocity = vel;
         if (Physics.Raycast(transform.position, Vector3.down, GetComponent<BoxCollider>().size.y / 2 + 0.4f))
         {
-            
+            Debug.DrawRay(transform.position, Vector3.down, Color.red);
             Quaternion rot = transform.rotation;
             rot.z = Mathf.Round(rot.z / 180) * 180;
             transform.rotation = rot;
@@ -31,7 +33,8 @@ public class PlayerController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 rb.velocity = Vector3.zero;
-                rb.AddForce(Vector2.up * jumpForce);            
+                rb.AddForce(Vector2.up * jumpForce);
+                isGrounded = false;            
             }
            
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -66,5 +69,19 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(gameObject);
         }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "Booster")
+        {
+            //Debug.Log("isTrigger");
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                rb.velocity = Vector3.zero;
+                rb.AddForce(Vector2.up * jumpForce * 1);
+            }
+        }
+        isGrounded = true;
     }
 }
