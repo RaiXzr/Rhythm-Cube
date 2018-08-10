@@ -69,6 +69,11 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(gameObject);
         }
+
+        if (other.gameObject.tag == "Finish")
+        {
+            //LevelComplete
+        }
     }
 
     void OnTriggerStay(Collider other)
