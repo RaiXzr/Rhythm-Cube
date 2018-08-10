@@ -14,9 +14,10 @@ public class GameController : MonoBehaviour {
 
 	void Start ()
     {
-
-
-	}
+#if UNITY_EDITOR
+        SceneManager.sceneLoaded += SceneLighting;
+#endif
+    }
 	
 	void Update ()
     {
@@ -39,4 +40,14 @@ public class GameController : MonoBehaviour {
 
         //wait for seconds on wake??
     }
+
+#if UNITY_EDITOR
+    void SceneLighting(Scene scene, LoadSceneMode mode)
+    {
+        if (UnityEditor.Lightmapping.giWorkflowMode == UnityEditor.Lightmapping.GIWorkflowMode.Iterative)
+        {
+            DynamicGI.UpdateEnvironment();
+        }
+    }
+#endif
 }
