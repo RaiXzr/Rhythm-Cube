@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+    private bool isPaused;
     private bool levelComplete;
     private bool gameOver;
     private bool restart;
@@ -19,6 +20,10 @@ public class GameController : MonoBehaviour {
 	
 	void Update ()
     {
+        //if(Input.GetKeyDown(KeyCode.Escape))
+            //isPaused = true
+            //Deltatime 0
+
         if (Input.GetKeyDown(KeyCode.R))
             {
                SceneManager.LoadScene("Main");

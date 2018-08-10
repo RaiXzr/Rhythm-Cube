@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour {
 
         if (other.gameObject.tag == "Finish")
         {
-            //LevelComplete
+            //LevelComplete & WinPanel shows up
         }
     }
 
