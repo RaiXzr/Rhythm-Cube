@@ -6,6 +6,11 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+    public GameObject pausePanel;
+    public GameObject inGamePanel;
+
+    public AudioSource music;
+
     private bool isPaused;
     private bool levelComplete;
     private bool gameOver;
@@ -17,7 +22,17 @@ public class GameController : MonoBehaviour {
 
     public void ResumeLevel()
     {
-
+        Time.timeScale = 1.0f;
+        pausePanel.SetActive(false);
+        Paused = false;
+        music.UnPause();
+    }
+    public void PauseLevel()
+    {
+        Time.timeScale = 0.0f;
+        pausePanel.SetActive(true);
+        Paused = true;
+        music.Pause();
     }
     public void RestartLevel()
     {
@@ -44,7 +59,8 @@ public class GameController : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SceneManager.LoadScene("Main");
+            //SceneManager.LoadScene("Main");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             //Debug.Log("restart");
         }
 
@@ -53,25 +69,11 @@ public class GameController : MonoBehaviour {
             //isPaused
             if (Paused == true)
             {
-                Time.timeScale = 1.0f;
-                //Canvas.gameObject.SetActive(false);
-                //Screen.showCursor = false;
-                //Screen.lockCursor = true;
-                //Camera.audio.Play();
-                Paused = false;
+                ResumeLevel();
             }
             else
             {
-                Time.timeScale = 0.0f;
-                //Canvas.gameObject.SetActive(true);
-                //Screen.showCursor = true;
-                //Screen.lockCursor = false;
-                //Camera.audio.Pause();
-                Paused = true;
-
-                //PauseMenu
-
-                // Debug.Log("Quit");
+                PauseLevel();
             }
 
 

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+    public UIManager UI;
     private Rigidbody rb;
     public float speed;
     public float jumpForce;
@@ -11,15 +12,24 @@ public class PlayerController : MonoBehaviour {
     private Vector3 moveDirection = Vector3.zero;
     AudioCalculator audioCalculator;
     public bool isGrounded;
+    //public bool winPanel;
+    //public bool losePanel;
 
     void Start()
     {
+        //float startDistance = Vector3.Distance(player.transform.(0,0.5f,0), win.transform.(1.928f,11.44f));
         rb = GetComponent<Rigidbody>();
         isGrounded = true;
+        //winPanel = false;
+        //losePanel = false;
     }
 
     void Update()
     {
+        
+        //float currentDistance = Vector3.Distance(player.transform.position, win.transform.position);
+
+        //float percentage = (currentDistance / winDistance) * 100f;
         //Vector3 vel = rb.velocity;
         //vel.x = speed;
         //rb.velocity = vel;
@@ -30,7 +40,7 @@ public class PlayerController : MonoBehaviour {
             rot.z = Mathf.Round(rot.z / 180) * 180;
             transform.rotation = rot;
             
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && isGrounded)
             {
                 rb.velocity = Vector3.zero;
                 rb.AddForce(Vector2.up * jumpForce);
@@ -67,26 +77,45 @@ public class PlayerController : MonoBehaviour {
     {
         if (other.gameObject.tag == "Obstacle")
         {
+            UI.Lose();
             Destroy(gameObject);
+           
         }
 
         if (other.gameObject.tag == "Finish")
         {
+            UI.Win();
             //LevelComplete & WinPanel shows up
         }
+        if (other.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+        }
     }
+
+    bool boosted = false;
 
     void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Booster")
         {
             //Debug.Log("isTrigger");
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && boosted == false)
             {
                 rb.velocity = Vector3.zero;
                 rb.AddForce(Vector2.up * jumpForce * 1);
+                boosted = true;
             }
         }
+        else
         isGrounded = true;
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        //if (other.gameObject.tag == "Booster")
+        {
+            boosted = false;
+        }
     }
 }
